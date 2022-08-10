@@ -66,3 +66,19 @@ def line_intersection(L1, L2):
         return x,y
     else:
         return False
+
+def line_visualizatgion(point1, point2):
+    # 직선 그리는 visualization
+    ax.plot([a1[0], a2[0]],[a1[1], a2[1]],[a1[2], a2[2]], color='black')
+    ax.scatter(x1, y1, a0[2], s=10)
+    ax.scatter(x2, y2, a0[2], s=10)
+    ax.scatter(x3, y3, a0[2], s=10)
+    x4 = (x1+x2+x3) / 3
+    y4 = (y1+y2+y3) / 3
+    ax.scatter(x4, y4, a0[2], s=10)
+
+    center_x = x4
+    center_y = y4
+    center_x = (a0[2] + a1[2] + a2[2] + a3[2] + a4[2] + a5[2]) / 6
+
+    return 0

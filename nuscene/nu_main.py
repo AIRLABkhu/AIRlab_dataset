@@ -66,10 +66,7 @@ if __name__ == "__main__":
     # ego_ex, camera_ex, camera_in = load_camera_coord(nusc, sample_info)
 
     """ Visualization """
-    # # coordinate visualization
-    # draw_geometry(ego_ex, camera_ex, camera_in)
+    nu.lidar_points_visualization(sample=sample)
 
-    # nusc.render_sample_data(lidar_token, with_anns=True, show_lidarseg=True)
-
-    # nu.lidar_and_camera_coordinate_vis(sample)
-    points, coloring, img = nu.map_pointcloud_to_image(cam_token=cam_token, lidar_token=lidar_token)
+    ''' Projection to image '''
+    nu.lidar_projection_to_image(cam_token=cam_token, lidar_token=lidar_token, dst_path= './lidar_to_image_result.jpg')
