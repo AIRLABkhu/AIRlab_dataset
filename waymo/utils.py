@@ -3,6 +3,15 @@ import cv2
 import matplotlib.pyplot as plt 
 import numpy as np 
 import tensorflow as tf
+from waymo_open_dataset import dataset_pb2 as open_dataset
+from waymo_open_dataset.utils import frame_utils
+from waymo_open_dataset.utils import camera_segmentation_utils
+
+'''
+2022.08.16 김대호
+Waymo Open Dataset tutorial 참조 
+'''
+
 
 def distortion_correction(frame):
     w = frame.context.camera_calibrations[0].width
@@ -33,3 +42,30 @@ def distortion_correction(frame):
     plt.imshow(img_undist)
     plt.title('undistortion')
     plt.axis = ('off')
+
+def origianl_images_to_panorama(frames_unordered):
+    camera_left_to_right_order = [open_dataset.CameraName.SIDE_LEFT,
+                                open_dataset.CameraName.FRONT_LEFT,
+                                open_dataset.CameraName.FRONT,  
+                                open_dataset.CameraName.FRONT_RIGHT,
+                                open_dataset.CameraName.SIDE_RIGHT] 
+                              
+    frames_ordered = []
+
+    for frame in frames_unordered:
+        image_proto_dict = {image.name : image.image for image in frame.images}
+        frames_ordered.append([image_proto_dict[name] for name in camera_left_to_right_order])
+
+        def _pad_to_common_shape(image):
+            return np.pad(image, [[1280 - image.shape[0], 0], [0, 0], [0, 0]])
+
+        images_decode = [[tf.image.decode_jpeg(frame) for frame in frames ] for frames in frames_ordered]
+        padding_images = [[_pad_to_common_shape(image) for image in images ] for images in images_decode]
+        panorama_image_no_concat = [np.concatenate(image, axis=1) for image in padding_images]
+        panorama_image = np.concatenate(panorama_image_no_concat, axis=0)
+
+        plt.figure(figsize=(64, 60))
+        plt.imshow(panorama_image)
+        plt.grid(False)
+        plt.axis('off')
+        plt.show()
