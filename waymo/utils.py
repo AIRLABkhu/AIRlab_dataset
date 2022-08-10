@@ -59,13 +59,13 @@ def origianl_images_to_panorama(frames_unordered):
         def _pad_to_common_shape(image):
             return np.pad(image, [[1280 - image.shape[0], 0], [0, 0], [0, 0]])
 
-        images_decode = [[tf.image.decode_jpeg(frame) for frame in frames ] for frames in frames_ordered]
-        padding_images = [[_pad_to_common_shape(image) for image in images ] for images in images_decode]
-        panorama_image_no_concat = [np.concatenate(image, axis=1) for image in padding_images]
-        panorama_image = np.concatenate(panorama_image_no_concat, axis=0)
+    images_decode = [[tf.image.decode_jpeg(frame) for frame in frames ] for frames in frames_ordered]
+    padding_images = [[_pad_to_common_shape(image) for image in images ] for images in images_decode]
+    panorama_image_no_concat = [np.concatenate(image, axis=1) for image in padding_images]
+    panorama_image = np.concatenate(panorama_image_no_concat, axis=0)
 
-        plt.figure(figsize=(64, 60))
-        plt.imshow(panorama_image)
-        plt.grid(False)
-        plt.axis('off')
-        plt.show()
+    plt.figure(figsize=(64, 60))
+    plt.imshow(panorama_image)
+    plt.grid(False)
+    plt.axis('off')
+    plt.show()
